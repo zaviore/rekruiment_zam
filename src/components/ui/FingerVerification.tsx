@@ -289,8 +289,6 @@ const FingerVerification: React.FC = () => {
 
   return (
     <div className="finger-verification">
-      <h2>Verifikasi Pengguna</h2>
-      
       <div className="verification-steps">
         <h3>Langkah Verifikasi:</h3>
         <div className="step-item">
@@ -344,12 +342,6 @@ const FingerVerification: React.FC = () => {
           </button>
         )}
       </div>
-      
-      {gesture && (
-        <div className="gesture-info">
-          <p>Gesture terdeteksi: <strong>{gesture}</strong></p>
-        </div>
-      )}
     </div>
   );
 };

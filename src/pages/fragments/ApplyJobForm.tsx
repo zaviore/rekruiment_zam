@@ -153,20 +153,10 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
               
               {showFingerVerification && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                  <div className="bg-white p-4 rounded-lg max-w-sm w-full">
-                    <h3 className="text-lg font-medium mb-4">Finger Verification</h3>
-                    <FingerVerification 
-                      onVerificationComplete={(success) => {
-                        if (success) {
-                          const mockImageUrl = "https://randomuser.me/api/portraits/men/32.jpg";
-                          handleInputChange("photoProfile", mockImageUrl);
-                        }
-                        setShowFingerVerification(false);
-                      }}
-                      onCountdownComplete={() => {
-                        console.log("Countdown complete");
-                      }}
-                    />
+                  <div className="bg-white p-4 rounded-lg max-w-xl w-full">
+                    <h3 className="text-lg font-medium">Raise Your Hand to Capture </h3>
+                    <p>We’ll take the photo once your hand pose is detected.</p>
+                    <FingerVerification />
                     <button
                       type="button"
                       onClick={(e) => {

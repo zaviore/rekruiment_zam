@@ -14,7 +14,7 @@ const UserDashboard: React.FC = () => {
   const navigate = useNavigate();
   const activeJobs = jobs
     .filter(job => job.status === 'active')
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); // Mengurutkan dari yang terbaru
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   const [selectedJob, setSelectedJob] = useState(activeJobs.length > 0 ? activeJobs[0] : null);
   const [isApplying, setIsApplying] = useState(false);
 

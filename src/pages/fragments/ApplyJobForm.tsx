@@ -26,7 +26,6 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showFingerVerification, setShowFingerVerification] = useState<boolean>(false);
   
-  // Helper function to get field status
   const getFieldStatus = (fieldName: string): FieldStatus => {
     const field = job.fields.find(f => f.name === fieldName);
     return field?.status || 'mandatory';
@@ -34,8 +33,7 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
   
   const handleInputChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
-    
-    // Clear error when user types
+
     if (errors[field]) {
       const newErrors = { ...errors };
       delete newErrors[field];
@@ -45,8 +43,7 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
   
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
-    // Validate only mandatory fields
+
     if (getFieldStatus('fullName') === 'mandatory' && !formData.fullName.trim()) {
       newErrors.fullName = "Full name is required";
     }
@@ -100,7 +97,6 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
     }
   };
 
-  // Render field based on its status
   const shouldRenderField = (fieldName: string): boolean => {
     const status = getFieldStatus(fieldName);
     return status !== 'off';
@@ -174,16 +170,15 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
                     <button
                       type="button"
                       onClick={(e) => {
-                        // Mencegah navigasi default dan reload halaman
+
                         e.preventDefault();
                         e.stopPropagation();
                         
-                        // Matikan kamera menggunakan fungsi global yang telah dibuat
+   
                         if ((window as any).stopFingerVerificationCamera) {
                           (window as any).stopFingerVerificationCamera();
                         }
-                        
-                        // Tutup modal
+  
                         setShowFingerVerification(false);
                       }}
                       className="mt-4 w-full py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"

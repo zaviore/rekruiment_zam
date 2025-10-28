@@ -53,7 +53,6 @@ declare module 'fingerpose' {
     DiagonalDownLeft: 'DIAGONAL_DOWN_LEFT';
   };
 
-  // Gestures
   export const GestureDescriptions: {
     Victory: GestureDescription;
     ThumbsUp: GestureDescription;

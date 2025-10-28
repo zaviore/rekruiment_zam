@@ -11,7 +11,6 @@ const ApplyJobPage: React.FC = () => {
   
   const handleSubmit = async (formData: any) => {
     try {
-      // Reformat the data to match what jobContext expects
       const applicationData = {
         fullName: formData.fullName,
         dateOfBirth: formData.dateOfBirth,

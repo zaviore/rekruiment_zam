@@ -51,7 +51,7 @@ export const JobsProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     await new Promise(resolve => setTimeout(resolve, 1000));
     console.log("Job application submitted:", { jobId, formData });
     
-    // Create a new candidate from the form data
+
     if (formData) {
       const newCandidate: Candidate = {
         id: `${jobId}_${Date.now()}`,
@@ -69,8 +69,7 @@ export const JobsProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           { key: "linkedin_url", label: "LINKEDIN", value: formData.linkedinUrl || "" }
         ]
       };
-      
-      // Add the new candidate to the candidates list
+
       setCandidates(prev => [...prev, newCandidate]);
     }
   };

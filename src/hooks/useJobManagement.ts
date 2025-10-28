@@ -26,7 +26,7 @@ export const useJobManagement = () => {
 
   const filteredJobs = jobs
     .filter((job) => job.jobName.toLowerCase().includes(debouncedSearchQuery.toLowerCase()))
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); // Mengurutkan dari yang terbaru
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); 
 
 
   const formatDate = (date: Date) => {

@@ -1,7 +1,10 @@
 .finger-verification {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
   max-width: 800px;
   margin: 0 auto;
-  font-family: Arial, sans-serif;
 }
 
 .finger-verification h2 {
@@ -51,27 +54,61 @@
 .video-container {
   position: relative;
   width: 100%;
-  height: 400px;
+  max-width: 640px;
   margin: 20px 0;
-  background-color: #000;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.input-video, .output-canvas {
+.input-video {
+  width: 100%;
+  height: auto;
+  transform: scaleX(-1);
+}
+
+.output-canvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.webcam-container {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.webcam {
+  width: 100%;
+  height: auto;
+  transform: scaleX(-1);
+}
+
+.captured-image-container {
+  width: 100%;
+  max-width: 640px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.captured-image {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .controls {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin: 20px 0;
 }
 
 .controls button {

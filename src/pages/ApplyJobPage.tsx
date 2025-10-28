@@ -1,15 +1,20 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useJobs } from "@/contexts/jobContext";
 import { ApplyJobForm } from "./fragments";
+import { useState } from "react";
 
 const ApplyJobPage: React.FC = () => {
   const { jobId } = useParams<{ jobId: string }>();
   const { jobs, applyForJob } = useJobs();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const selectedJob = jobs.find(job => job.id === jobId);
   
   const handleSubmit = async (formData: any) => {
+    if (isSubmitting) return; // Mencegah double submit
+    
+    setIsSubmitting(true);
     try {
       const applicationData = {
         fullName: formData.fullName,
@@ -28,6 +33,7 @@ const ApplyJobPage: React.FC = () => {
     } catch (error) {
       console.error("Error submitting application:", error);
       alert("Failed to submit application. Please try again.");
+      setIsSubmitting(false); // Reset state jika terjadi error
     }
   };
   
@@ -44,7 +50,8 @@ const ApplyJobPage: React.FC = () => {
       <ApplyJobForm 
         jobTitle={selectedJob.jobName} 
         job={selectedJob}
-        onSubmit={handleSubmit} 
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
       />
     </div>
   );

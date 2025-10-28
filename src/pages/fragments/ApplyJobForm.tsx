@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Calendar, ChevronDown } from "lucide-react";
+import { ArrowLeft, Calendar, ChevronDown, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { type Job, type FieldStatus } from "../../types";
 import FingerVerification from "../../components/ui/FingerVerification";
@@ -8,9 +8,10 @@ interface ApplyJobFormProps {
   jobTitle: string;
   job: Job;
   onSubmit: (formData: any) => void;
+  isSubmitting?: boolean;
 }
 
-const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) => {
+const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit, isSubmitting = false }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     photoProfile: "",
@@ -43,6 +44,10 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
   
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
+    
+    if (!formData.photoProfile) {
+      newErrors.photoProfile = "Foto profil wajib diisi";
+    }
 
     if (getFieldStatus('fullName') === 'mandatory' && !formData.fullName.trim()) {
       newErrors.fullName = "Full name is required";
@@ -151,30 +156,75 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
                 Take a Picture
               </button>
               
+              {errors.photoProfile && (
+                <div className="text-red-500 text-xs mt-1">{errors.photoProfile}</div>
+              )}
+              
               {showFingerVerification && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                   <div className="bg-white p-4 rounded-lg max-w-xl w-full">
-                    <h3 className="text-lg font-medium">Raise Your Hand to Capture </h3>
-                    <p>We’ll take the photo once your hand pose is detected.</p>
-                    <FingerVerification />
-                    <button
-                      type="button"
+                    <div className="flex justify-between items-center">
+                      <div>
+                           <h3 className="text-lg font-medium">Raise Your Hand to Capture </h3>
+                            <p className="text-sm">We’ll take the photo once your hand pose is detected.</p>
+                      </div>
+                      <div> 
+                    <div
+                      id="closeFingerVerification"
                       onClick={(e) => {
-
                         e.preventDefault();
                         e.stopPropagation();
                         
-   
+         
                         if ((window as any).stopFingerVerificationCamera) {
                           (window as any).stopFingerVerificationCamera();
+                        }
+                        
+                        try {
+                          navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+                            .then(stream => {
+                              stream.getTracks().forEach(track => {
+                                track.stop();
+                                console.log("Force stopped track from close button:", track.kind);
+                              });
+                            });
+                        } catch (err) {
+                          console.log("No additional tracks to stop");
+                        }
+                        
+                        // Hentikan semua media tracks yang aktif
+                        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+                          navigator.mediaDevices.enumerateDevices()
+                            .then(devices => {
+                              devices.forEach(device => {
+                                if (device.kind === 'videoinput') {
+                                  console.log("Attempting to stop video device:", device.label);
+                                }
+                              });
+                            });
                         }
   
                         setShowFingerVerification(false);
                       }}
-                      className="mt-4 w-full py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                      className="w-full py-2 text-gray-800 rounded-md cursor-pointer "
                     >
-                      Cancel
-                    </button>
+                      <X size={18} />
+                    </div></div>
+                 
+                    </div>
+                    <FingerVerification 
+                      onComplete={(photoData) => {
+                        setFormData({...formData, photoProfile: photoData});
+                        setShowFingerVerification(false);
+
+                        if (errors.photoProfile) {
+                          const newErrors = { ...errors };
+                          delete newErrors.photoProfile;
+                          setErrors(newErrors);
+                        }
+                      }}
+                    />
+                   
                   </div>
                 </div>
               )}
@@ -349,9 +399,10 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit }) 
         
         <button
           type="submit"
-          className="w-full bg-teal-600 text-white py-3 rounded-md font-medium hover:bg-teal-700 transition-colors"
+          disabled={isSubmitting}
+          className="w-full bg-teal-600 text-white py-3 rounded-md font-medium hover:bg-teal-700 transition-colors disabled:bg-teal-400 disabled:cursor-not-allowed"
         >
-          Submit
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>

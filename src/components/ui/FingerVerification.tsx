@@ -1,23 +1,27 @@
 "use client"
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback  } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as handpose from "@tensorflow-models/handpose";
 import { drawHand } from "@/utils/drawhand";
+import Webcam from "react-webcam";
 
 import "./FingerVerification.css";
 import * as fp from "fingerpose";
 
-const FingerVerification: React.FC = () => {
+const FingerVerification: React.FC<{onComplete?: (photoData: string) => void}> = ({ onComplete }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const webcamRef = useRef<Webcam | null>(null);
   const handposeModelRef = useRef<handpose.HandPose | null>(null);
+  const isRunningRef = useRef<boolean>(true);
   const [status, setStatus] = useState<string>("Memuat model...");
   const [isVerified, setIsVerified] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const [handDetected, setHandDetected] = useState(false);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [gesture, setGesture] = useState<string>("Menunggu...");
-  
+  const [showWebcam, setShowWebcam] = useState(false);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   const [verificationStep, setVerificationStep] = useState<number>(1);
   const [stepsCompleted, setStepsCompleted] = useState({
@@ -26,12 +30,17 @@ const FingerVerification: React.FC = () => {
     step3: false 
   });
 
+  const stepsCompletedRef = useRef({
+    step1: false,
+    step2: false,
+    step3: false
+  });
+
 
   const initHandposeModel = async () => {
     try {
       setStatus("🧠 Memuat model handpose...");
       console.log("Mulai memuat model handpose...");
-      
 
       await tf.ready();
       console.log("TensorFlow.js backend:", tf.getBackend());
@@ -39,19 +48,18 @@ const FingerVerification: React.FC = () => {
       const model = await handpose.load();
       handposeModelRef.current = model;
       
-      console.log("✅ Model Handpose berhasil dimuat!");
-      setStatus("✅ Model siap!");
+      setStatus("Model siap!");
       setModelLoaded(true);
     } catch (err) {
-      console.error("❌ Gagal memuat model:", err);
-      setStatus("❌ Gagal memuat model");
+      console.error("Gagal memuat model:", err);
+      setStatus("Gagal memuat model");
     }
   };
 
 
   const initCamera = async () => {
     try {
-      setStatus("📷 Mengaktifkan kamera...");
+      setStatus("� Mengaktifkan kamera...");
       console.log("Mengaktifkan kamera...");
       
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -65,7 +73,7 @@ const FingerVerification: React.FC = () => {
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.onloadeddata = () => {
-          console.log("✅ Video benar-benar siap!");
+          console.log("Video benar-benar siap!");
           console.log("Video readyState:", videoRef.current?.readyState);
           
 
@@ -75,7 +83,7 @@ const FingerVerification: React.FC = () => {
           }
           
           setCameraActive(true);
-          setStatus("✅ Kamera siap. Klik tombol mulai deteksi.");
+          setStatus("Kamera siap. Klik tombol mulai deteksi.");
         };
         
         videoRef.current.play().catch(err => {
@@ -83,8 +91,8 @@ const FingerVerification: React.FC = () => {
         });
       }
     } catch (err) {
-      console.error("❌ Gagal mengakses kamera:", err);
-      setStatus("❌ Gagal mengakses kamera");
+      console.error("Gagal mengakses kamera:", err);
+      setStatus("Gagal mengakses kamera");
     }
   };
 
@@ -94,7 +102,7 @@ const FingerVerification: React.FC = () => {
       return;
     }
 
-    setStatus("🔍 Mendeteksi tangan...");
+    setStatus("Mendeteksi tangan..");
     console.log("Mulai deteksi tangan dengan model:", handposeModelRef.current);
     
 
@@ -151,7 +159,7 @@ const FingerVerification: React.FC = () => {
 
       const detect = async () => {
         if (!videoRef.current || videoRef.current.readyState < 2) {
-          console.log("Video belum siap, menunggu...");
+          console.log("Video belum siap, menunggu..");
           requestAnimationFrame(detect);
           return;
         }
@@ -190,39 +198,62 @@ const FingerVerification: React.FC = () => {
                   const bestGesture = gestureResult.gestures.reduce((prev, curr) => 
                     prev.score > curr.score ? prev : curr
                   );
+              
+                  if (!stepsCompletedRef.current.step1 && bestGesture.name === 'three_finger') {
                   
-                  console.log("Best gesture:", bestGesture.name, "score:", bestGesture.score);
-
-                  console.log("Verifikasi step:", verificationStep, "Gesture terdeteksi:", bestGesture.name);
-                  
-                  if (verificationStep === 1 && bestGesture.name === 'three_finger') {
-                    console.log("3 jari terdeteksi!");
                     setGesture("three_finger");
-                    setStepsCompleted(prev => ({ ...prev, step1: true }));
-                    setStatus("✅ Langkah 1 berhasil! Tunjukkan 2 jari (telunjuk dan tengah)");
+                    stepsCompletedRef.current.step1 = true;
+           
+                    setStepsCompleted({
+                      step1: true,
+                      step2: false,
+                      step3: false
+                    });
+                    
+                    setStatus("Langkah 1 berhasil! Tunjukkan 2 jari (telunjuk dan tengah)");
                     setVerificationStep(2);
                   } 
-                  else if (verificationStep === 2 && bestGesture.name === 'two_finger') {
-                    console.log("2 jari terdeteksi!");
+                  
+                  else if (stepsCompletedRef.current.step1 && !stepsCompletedRef.current.step2 && bestGesture.name === 'two_finger') {
                     setGesture("two_finger");
-                    setStepsCompleted(prev => ({ ...prev, step2: true }));
-                    setStatus("✅ Langkah 2 berhasil! Tunjukkan 1 jari (telunjuk)");
+                    stepsCompletedRef.current.step2 = true;
+                    setStepsCompleted({
+                      step1: true,
+                      step2: true,
+                      step3: false
+                    });
+                    
+      
+                    setStatus("Langkah 2 berhasil! Tunjukkan 1 jari (telunjuk)");
                     setVerificationStep(3);
                   }
-                  else if (verificationStep === 3 && bestGesture.name === 'one_finger') {
+                  else if (stepsCompletedRef.current.step1 && stepsCompletedRef.current.step2 && !stepsCompletedRef.current.step3 && bestGesture.name === 'one_finger') {
                     console.log("1 jari terdeteksi!");
                     setGesture("one_finger");
-                    setStepsCompleted(prev => ({ ...prev, step3: true }));
-                    setStatus("✅ Verifikasi berhasil! Semua langkah selesai.");
-                    setIsVerified(true);
+                    stepsCompletedRef.current.step3 = true;
 
+                    setStepsCompleted({
+                      step1: true,
+                      step2: true,
+                      step3: true
+                    });
+
+                    setStatus("Verifikasi berhasil! Semua langkah selesai.");
+                    setIsVerified(true);
+     
+                    isRunningRef.current = false;
+
+                    if (videoRef.current && videoRef.current.srcObject) {
+                      const stream = videoRef.current.srcObject as MediaStream;
+                      stream.getTracks().forEach(track => track.stop());
+                    }
+           
                     setTimeout(() => {
-                      captureImage();
+                      setShowWebcam(true);
+                      setStatus("Verifikasi berhasil! Siap untuk mengambil foto. Klik tombol untuk mengambil foto.");
                     }, 1000);
                   } else {
-              
                     setGesture(`Terdeteksi: ${bestGesture.name} (Skor: ${bestGesture.score.toFixed(2)})`);
-                    console.log("Gesture tidak sesuai dengan step saat ini:", bestGesture.name, "Step:", verificationStep);
                   }
                 } else {
                   setGesture("Menunggu pose yang benar...");
@@ -238,7 +269,7 @@ const FingerVerification: React.FC = () => {
         }
         
 
-        if (!isVerified) {
+        if (!isVerified && isRunningRef.current) {
           requestAnimationFrame(detect);
         }
       };
@@ -246,7 +277,7 @@ const FingerVerification: React.FC = () => {
       detect();
     } catch (err) {
       console.error("Error saat deteksi:", err);
-      setStatus("❌ Error saat deteksi");
+      setStatus("Error saat deteksi");
     }
   };
 
@@ -267,25 +298,59 @@ const FingerVerification: React.FC = () => {
   }, []);
 
 
+
   const captureImage = () => {
-    if (videoRef.current && canvasRef.current) {
-      const context = canvasRef.current.getContext('2d');
-      if (context) {
-
-        canvasRef.current.width = videoRef.current.videoWidth;
-        canvasRef.current.height = videoRef.current.videoHeight;
-        
-
-        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-
-        context.font = '20px Arial';
-        context.fillStyle = 'green';
-        context.fillText('Terverifikasi', 10, 30);
-        
-        setStatus("Gambar berhasil diambil");
-      }
+    if (webcamRef.current) {
+      const imageSrc = webcamRef.current.getScreenshot();
+      setCapturedImage(imageSrc);
+      setStatus("Foto berhasil diambil. Gunakan atau ambil ulang foto.");
     }
   };
+
+  
+  const cleanupAllResources = useCallback(() => {
+    console.log("Cleaning up all camera resources...");
+    isRunningRef.current = false;
+
+
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => {
+        track.stop();
+        console.log("Video track stopped:", track.kind);
+      });
+      videoRef.current.srcObject = null;
+    }
+ 
+
+    if (webcamRef.current && webcamRef.current.video && webcamRef.current.video.srcObject) {
+      const stream = webcamRef.current.video.srcObject as MediaStream;
+      stream.getTracks().forEach(track => {
+        track.stop();
+        console.log("Webcam track stopped:", track.kind);
+      });
+      webcamRef.current.video.srcObject = null;
+    }
+    
+
+    navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+      .then(stream => {
+        stream.getTracks().forEach(track => {
+          track.stop();
+          console.log("Force stopped additional track:", track.kind);
+        });
+      })
+      .catch(err => console.log("No additional tracks to stop"));
+  }, []);
+ 
+  useEffect(() => {
+    (window as any).stopFingerVerificationCamera = cleanupAllResources;
+    
+    return () => {
+
+      delete (window as any).stopFingerVerificationCamera;
+    };
+  }, [cleanupAllResources]);
 
   return (
     <div className="finger-verification">
@@ -293,7 +358,7 @@ const FingerVerification: React.FC = () => {
         <h3>Langkah Verifikasi:</h3>
         <div className="step-item">
           <div className={`step-number ${stepsCompleted.step1 ? 'completed' : (verificationStep === 1 ? 'active' : '')}`}>1</div>
-          <div className="step-desc">Tunjukkan 3 jari (jempol, telunjuk, tengah)</div>
+          <div className="step-desc">Tunjukkan 3 jari (telunjuk, tengah, manis)</div>
         </div>
         <div className="step-item">
           <div className={`step-number ${stepsCompleted.step2 ? 'completed' : (verificationStep === 2 ? 'active' : '')}`}>2</div>
@@ -306,17 +371,39 @@ const FingerVerification: React.FC = () => {
       </div>
       
       <div className="video-container">
-        <video 
-          ref={videoRef} 
-          className="input-video"
-          playsInline
-        />
-        <canvas ref={canvasRef} className="output-canvas" />
+        {!showWebcam && (
+          <>
+            <video 
+              ref={videoRef} 
+              className="input-video"
+              playsInline
+            />
+            <canvas ref={canvasRef} className="output-canvas" />
+          </>
+        )}
+        
+        {showWebcam && (
+          <div className="webcam-container">
+            {!capturedImage ? (
+              <Webcam
+                ref={webcamRef}
+                audio={false}
+                screenshotFormat="image/jpeg"
+                className="webcam"
+              />
+            ) : (
+              <div className="captured-image-container">
+                <img src={capturedImage} alt="Foto yang diambil" className="captured-image" />
+              </div>
+            )}
+          </div>
+        )}
       </div>
       
       <div className="controls">
-        {!cameraActive && (
+        {!cameraActive && !showWebcam && (
           <button 
+            type="button"
             onClick={initCamera}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold"
           >
@@ -324,24 +411,54 @@ const FingerVerification: React.FC = () => {
           </button>
         )}
         
-        {cameraActive && !isVerified && !handDetected && (
+        {cameraActive && !showWebcam && (
           <button 
+            type="button"
             onClick={startDetection}
             className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-bold"
+            disabled={!modelLoaded}
           >
-            Mulai Deteksi
+            {modelLoaded ? "Mulai Verifikasi" : "loading..."}
           </button>
         )}
-        
-        {isVerified && (
+
+        {showWebcam && !capturedImage && (
           <button 
+            type="button"
             onClick={captureImage}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold"
+            className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-bold"
           >
-            Ambil Gambar Lagi
+            Ambil Foto
           </button>
+        )}
+
+        {showWebcam && capturedImage && (
+          <div className="button-group">
+            <button 
+              onClick={() => setCapturedImage(null)}
+              className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg font-bold mr-2"
+            >
+              Ambil Ulang
+            </button>
+            <button 
+              onClick={() => {
+                setStatus("Foto berhasil disimpan ke form aplikasi");
+              
+                if (onComplete && capturedImage) {
+                  onComplete(capturedImage);
+                }
+               
+                cleanupAllResources();
+                setShowWebcam(false);
+              }}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold"
+            >
+              Gunakan Foto Ini
+            </button>
+          </div>
         )}
       </div>
+      
     </div>
   );
 };

@@ -162,57 +162,10 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit, is
               
               {showFingerVerification && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                  <div className="bg-white p-4 rounded-lg max-w-xl w-full">
-                    <div className="flex justify-between items-center">
-                      <div>
-                           <h3 className="text-lg font-medium">Raise Your Hand to Capture </h3>
-                            <p className="text-sm">We’ll take the photo once your hand pose is detected.</p>
-                      </div>
-                      <div> 
-                    <div
-                      id="closeFingerVerification"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-         
-                        if ((window as any).stopFingerVerificationCamera) {
-                          (window as any).stopFingerVerificationCamera();
-                        }
-                        
-                        try {
-                          navigator.mediaDevices.getUserMedia({ audio: false, video: true })
-                            .then(stream => {
-                              stream.getTracks().forEach(track => {
-                                track.stop();
-                                console.log("Force stopped track from close button:", track.kind);
-                              });
-                            });
-                        } catch (err) {
-                          console.log("No additional tracks to stop");
-                        }
-                        
-                        // Hentikan semua media tracks yang aktif
-                        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-                          navigator.mediaDevices.enumerateDevices()
-                            .then(devices => {
-                              devices.forEach(device => {
-                                if (device.kind === 'videoinput') {
-                                  console.log("Attempting to stop video device:", device.label);
-                                }
-                              });
-                            });
-                        }
-  
-                        setShowFingerVerification(false);
-                      }}
-                      className="w-full py-2 text-gray-800 rounded-md cursor-pointer "
-                    >
-                      <X size={18} />
-                    </div></div>
-                 
-                    </div>
+                  <div className="bg-white rounded-lg max-w-xl w-full">
+                   
                     <FingerVerification 
+                      onClose={() => setShowFingerVerification(false)}
                       onComplete={(photoData) => {
                         setFormData({...formData, photoProfile: photoData});
                         setShowFingerVerification(false);

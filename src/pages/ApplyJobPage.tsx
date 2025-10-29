@@ -12,7 +12,7 @@ const ApplyJobPage: React.FC = () => {
   const selectedJob = jobs.find(job => job.id === jobId);
   
   const handleSubmit = async (formData: any) => {
-    if (isSubmitting) return; // Mencegah double submit
+    if (isSubmitting) return; 
     
     setIsSubmitting(true);
     try {
@@ -33,7 +33,7 @@ const ApplyJobPage: React.FC = () => {
     } catch (error) {
       console.error("Error submitting application:", error);
       alert("Failed to submit application. Please try again.");
-      setIsSubmitting(false); // Reset state jika terjadi error
+      setIsSubmitting(false); 
     }
   };
   

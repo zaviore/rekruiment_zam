@@ -98,7 +98,11 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit, is
     e.preventDefault();
     
     if (validateForm()) {
-      onSubmit(formData);
+      const submittedData = {
+        ...formData,
+        phoneNumber: formData.phoneNumber ? `+62${formData.phoneNumber}` : formData.phoneNumber
+      };
+      onSubmit(submittedData);
     }
   };
 
@@ -335,12 +339,12 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobTitle, job, onSubmit, is
             <label className="block text-sm mb-1">Phone number</label>
             <div className="flex">
               <div className="bg-gray-100 border border-gray-300 rounded-l-md px-3 py-2 flex items-center text-sm">
-                <span className="text-red-500 mr-1">*</span>
+                <span className="text-red-500 mr-1"></span>
                 +62
               </div>
               <input
                 type="tel"
-                value={formData.phoneNumber}
+                value={`${formData.phoneNumber}`}
                 onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
                 placeholder="81XXXXXXXX"
                 className={`flex-1 px-3 py-2 border-t border-r border-b ${errors.phoneNumber ? 'border-red-500' : 'border-gray-300'} rounded-r-md`}

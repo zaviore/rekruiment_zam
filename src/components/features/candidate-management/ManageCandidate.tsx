@@ -40,18 +40,18 @@ const ManageCandidate: React.FC<{ job: Job; onBack: () => void }> = ({ job }) =>
   };
 
   return (
-    <div className="space-y-6 px-5">
+    <div className="space-y-6 px-2 md:px-5">
       <div className="">
-        <h2 className="text-xl font-bold">{job.jobName}</h2>
+        <h2 className="text-lg md:text-xl font-bold">{job.jobName}</h2>
       </div>
-      <div className="border border-neutral-300 rounded-md p-4"> 
+      <div className="border border-neutral-300 rounded-md p-2 md:p-4"> 
         {candidates.length > 0 ? (
           <div className="bg-white rounded-lg shadow">
             <div className="overflow-x-auto relative">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left sticky left-0 z-20 bg-gray-50 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                    <th className="px-3 md:px-6 py-2 md:py-3 text-left sticky left-0 z-20 bg-gray-50 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
                       <CustomCheckbox 
                         checked={selectAll}
                         onChange={handleSelectAll}
@@ -60,7 +60,7 @@ const ManageCandidate: React.FC<{ job: Job; onBack: () => void }> = ({ job }) =>
                     {headers.map((header, idx) => (
                       <th 
                         key={idx}
-                        className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap ${idx === 0 ? 'sticky left-[3rem] z-20 bg-gray-50 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}`}
+                        className={`px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap ${idx === 0 ? 'sticky left-[3rem] z-20 bg-gray-50 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}`}
                       >
                         {header}
                       </th>
@@ -75,7 +75,7 @@ const ManageCandidate: React.FC<{ job: Job; onBack: () => void }> = ({ job }) =>
                         selectedCandidates.includes(candidate.id) ? 'bg-blue-50' : ''
                       }`}
                     >
-                      <td className="px-6 py-4 sticky left-0 z-20 bg-white shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                      <td className="px-3 md:px-6 py-2 md:py-4 sticky left-0 z-20 bg-white shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
                         <CustomCheckbox 
                           checked={selectedCandidates.includes(candidate.id)}
                           onChange={() => handleSelectCandidate(candidate.id)}
@@ -84,7 +84,7 @@ const ManageCandidate: React.FC<{ job: Job; onBack: () => void }> = ({ job }) =>
                       {candidate.attributes.map((attr, idx) => (
                         <td 
                           key={idx}
-                          className={`px-6 py-4 text-sm text-gray-900 whitespace-nowrap ${idx === 0 ? 'sticky left-[3rem] z-20 bg-white shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}`}
+                          className={`px-3 md:px-6 py-2 md:py-4 text-xs md:text-sm text-gray-900 whitespace-nowrap ${idx === 0 ? 'sticky left-[3rem] z-20 bg-white shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}`}
                         >
                           {!attr.value ? (
                             "-"
@@ -95,7 +95,7 @@ const ManageCandidate: React.FC<{ job: Job; onBack: () => void }> = ({ job }) =>
                               rel="noopener noreferrer"
                               className="text-blue-600 hover:text-blue-800 hover:underline"
                             >
-                              {attr.value.length > 40 ? attr.value.substring(0, 40) + '...' : attr.value}
+                              {attr.value.length > 20 ? attr.value.substring(0, 20) + '...' : attr.value}
                             </a>
                           ) : attr.key === 'date_of_birth' ? (
                             dayjs(attr.value).format('DD MMMM YYYY')

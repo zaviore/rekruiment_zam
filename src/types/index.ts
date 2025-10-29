@@ -63,4 +63,6 @@ export interface InputFieldProps {
   onKeyPress?: React.KeyboardEventHandler<HTMLInputElement>;
   placeholder?: string;
   icon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  onRightIconClick?: () => void;
 }

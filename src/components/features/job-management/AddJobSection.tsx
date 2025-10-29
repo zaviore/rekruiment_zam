@@ -14,7 +14,7 @@ const AddJobSection: React.FC<HeroSectionProps> = ({
   backgroundImage,
 }) => {
   return (
-    <div className="relative p-4 rounded-xl overflow-hidden w-80 h-fit">
+    <div className="relative p-4 rounded-xl overflow-hidden md:w-80 h-fit">
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{

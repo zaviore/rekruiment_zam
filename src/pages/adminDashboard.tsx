@@ -67,7 +67,7 @@ const AdminDashboard: React.FC = () => {
       title="Job List"
       iconColor="text-indigo-600"
     >
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex flex-col-reverse md:flex-row gap-4">
         <div className="w-full space-y-5">
           <SearchBar
             value={searchQuery}
@@ -97,13 +97,16 @@ const AdminDashboard: React.FC = () => {
           </div>
         </div>
     
-        <AddJobSection
-          title="Recruit the best candidates"
-          subtitle="Create jobs, invite, and hire with ease"
-          buttonText="Create a new job"
-          onButtonClick={() => toggleCreateModal(true)}
-          backgroundImage="/src/assets/createJobImg.jpg"
-        />
+     
+        <div >
+          <AddJobSection
+            title="Recruit the best candidates"
+            subtitle="Create jobs, invite, and hire with ease"
+            buttonText="Create a new job"
+            onButtonClick={() => toggleCreateModal(true)}
+            backgroundImage="/src/assets/createJobImg.jpg"
+          />
+        </div>
       </div>
 
 

@@ -1,3 +1,4 @@
+import React from "react";
 import type { InputFieldProps } from "@/types";
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -30,6 +31,5 @@ const InputField: React.FC<InputFieldProps> = ({
     </div>
   );
 };
-
 
 export default InputField;

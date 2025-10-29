@@ -4,9 +4,7 @@ import { X } from "lucide-react";
 import Webcam from "react-webcam";
 
 import "./FingerVerification.css";
-import { useVerification } from "@/hooks/useVerification";
-
-
+import { useVerification } from "./hooks";
 
 const FingerVerification: React.FC<{
   onClose?: () => void;
@@ -14,7 +12,6 @@ const FingerVerification: React.FC<{
 }> = ({ onClose, onComplete }) => {
   const {
     captureImage,
-    initCamera,
     videoRef,
     canvasRef,
     webcamRef,
@@ -37,7 +34,7 @@ const FingerVerification: React.FC<{
         <div>
           <h3 className="text-lg font-medium">Raise Your Hand to Capture </h3>
           <p className="text-sm">
-            We’ll take the photo once your hand pose is detected.
+            We'll take the photo once your hand pose is detected.
           </p>
         </div>
         <div>
@@ -140,7 +137,7 @@ const FingerVerification: React.FC<{
         {!cameraActive && !showWebcam && (
           <button
             type="button"
-            onClick={initCamera}
+            onClick={() => startDetection()}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold"
           >
             Aktifkan Kamera

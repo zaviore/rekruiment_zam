@@ -1,3 +1,4 @@
+import React from "react";
 import { AlertCircle } from "lucide-react";
 
 const ErrorAlert: React.FC<{ message: string }> = ({ message }) => {
@@ -8,6 +9,5 @@ const ErrorAlert: React.FC<{ message: string }> = ({ message }) => {
     </div>
   );
 };
-
 
 export default ErrorAlert;

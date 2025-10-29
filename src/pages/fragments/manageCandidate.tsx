@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { useJobs } from "@/contexts/jobContext";
 import type { Job } from "@/types";
 import { useState } from "react";
-import { CustomCheckbox } from "@/components/ui";
+import { CustomCheckbox } from "@/components/shared/ui";
 import emptyCandidateImg from "@/assets/empty_candidate.svg";
 import dayjs from "dayjs";
 

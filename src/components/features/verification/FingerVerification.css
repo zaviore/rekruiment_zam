@@ -11,7 +11,6 @@
   text-align: center;
 }
 
-
 .status-indicator {
   display: flex;
   justify-content: space-between;
@@ -102,32 +101,22 @@
 .captured-image {
   width: 100%;
   height: auto;
-  display: block;
 }
 
 .controls {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
   gap: 10px;
 }
 
-.controls button {
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.gesture-info {
-  text-align: center;
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #f0f0f0;
-  border-radius: 8px;
-}
-
-
 .verification-steps {
+  width: 100%;
   margin: 20px 0;
   padding: 15px;
   background-color: #f9f9f9;
@@ -136,15 +125,13 @@
 }
 
 .verification-steps h3 {
-  margin-top: 0;
   margin-bottom: 15px;
-  font-size: 18px;
+  font-weight: 600;
 }
 
 .step-item {
   display: flex;
   align-items: center;
-  font-size: 12px;
   margin-bottom: 10px;
 }
 
@@ -152,24 +139,24 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #d9d9d9;
+  background-color: #e0e0e0;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 15px;
   font-weight: bold;
-  color: #fff;
 }
 
 .step-number.active {
   background-color: #1890ff;
-  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.2);
+  color: white;
 }
 
 .step-number.completed {
   background-color: #52c41a;
+  color: white;
 }
 
 .step-desc {
-  flex-grow: 1;
+  font-size: 14px;
 }

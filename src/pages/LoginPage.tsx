@@ -1,4 +1,4 @@
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import rakaminLogo from "@/assets/Logo_Rakamin.svg";
 import { ErrorAlert, InputField } from "@/components/shared/ui";

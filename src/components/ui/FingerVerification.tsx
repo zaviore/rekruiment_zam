@@ -21,7 +21,6 @@ const FingerVerification: React.FC<{
   const [status, setStatus] = useState<string>("Memuat model...");
   const [isVerified, setIsVerified] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
-  const [handDetected, setHandDetected] = useState(false);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [gesture, setGesture] = useState<string>("Menunggu...");
   const [showWebcam, setShowWebcam] = useState(false);
@@ -42,27 +41,24 @@ const FingerVerification: React.FC<{
 
   const initHandposeModel = async () => {
     try {
-      setStatus("🧠 Memuat model handpose...");
-      console.log("Mulai memuat model handpose...");
+      setStatus("Memuat model handpose...");
 
       await tf.ready();
       console.log("TensorFlow.js backend:", tf.getBackend());
-
       const model = await handpose.load();
       handposeModelRef.current = model;
 
       setStatus("Model siap!");
       setModelLoaded(true);
     } catch (err) {
-      console.error("Gagal memuat model:", err);
       setStatus("Gagal memuat model");
     }
   };
 
   const initCamera = async () => {
     try {
-      setStatus("� Mengaktifkan kamera...");
-      console.log("Mengaktifkan kamera...");
+      setStatus("Mengaktifkan kamera...");
+
 
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -75,8 +71,7 @@ const FingerVerification: React.FC<{
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.onloadeddata = () => {
-          console.log("Video benar-benar siap!");
-          console.log("Video readyState:", videoRef.current?.readyState);
+
 
           if (canvasRef.current && videoRef.current) {
             canvasRef.current.width = videoRef.current.videoWidth;
@@ -92,7 +87,6 @@ const FingerVerification: React.FC<{
         });
       }
     } catch (err) {
-      console.error("Gagal mengakses kamera:", err);
       setStatus("Gagal mengakses kamera");
     }
   };
@@ -104,7 +98,6 @@ const FingerVerification: React.FC<{
     }
 
     setStatus("Mendeteksi tangan..");
-    console.log("Mulai deteksi tangan dengan model:", handposeModelRef.current);
 
     const threeFingerGesture = new fp.GestureDescription("three_finger");
     const twoFingerGesture = new fp.GestureDescription("two_finger");
@@ -181,15 +174,9 @@ const FingerVerification: React.FC<{
         }
 
         try {
-          console.log("Mencoba mendeteksi tangan...");
           const hands = await handposeModelRef.current!.estimateHands(
             videoRef.current
           );
-          console.log(
-            "Hasil deteksi tangan:",
-            hands.length > 0 ? "Tangan terdeteksi" : "Tidak ada tangan"
-          );
-
           if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
             if (ctx) {
@@ -213,13 +200,10 @@ const FingerVerification: React.FC<{
 
               if (hands.length > 0) {
                 drawHand(hands, ctx);
-                setHandDetected(true);
+               
 
                 const landmarks = hands[0].landmarks;
-                console.log("Landmarks terdeteksi:", landmarks.length);
                 const gestureResult = gestureEstimator.estimate(landmarks, 7.5);
-
-                console.log("Gesture results:", gestureResult.gestures);
 
                 if (gestureResult.gestures.length > 0) {
                   const bestGesture = gestureResult.gestures.reduce(
@@ -303,7 +287,6 @@ const FingerVerification: React.FC<{
                   setGesture("Menunggu pose yang benar...");
                 }
               } else {
-                setHandDetected(false);
                 setGesture("Menunggu tangan...");
               }
             }

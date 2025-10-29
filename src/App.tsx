@@ -4,7 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from '@/routes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './styles/toast-custom.css'; // Import custom toast styles
+import './styles/toast-custom.css';
 
 const App: React.FC = () => {
   return (

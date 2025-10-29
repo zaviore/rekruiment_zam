@@ -1,73 +1,59 @@
-# React + TypeScript + Vite
+# Job Portal Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
 
-Currently, two official plugins are available:
+The Job Portal Application is a comprehensive platform designed to connect job seekers with employers. It features two distinct user roles: admin (recruiters) and regular users (job seekers). Admins can create and manage job postings, configure application forms, and review candidate applications. Job seekers can browse available positions, view job details, and submit applications with identity verification.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Application Overview](./src/assets/overview.png)
 
-## React Compiler
+## Tech Stack Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend Framework**: React with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **Routing**: React Router DOM
+- **State Management**: React Context API
+- **Form Handling**: Custom form validation
+- **UI Components**: Custom components with Lucide React icons
+- **Identity Verification**: TensorFlow.js with Handpose model
+- **Notifications**: React Toastify
 
-## Expanding the ESLint configuration
+## How to Run Locally
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Clone the repository**
+   ```
+   git clone <repository-url>
+   cd my-react-app
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+2. **Install dependencies**
+   ```
+   npm install
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+3. **Start the development server**
+   ```
+   npm run dev
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+4. **Access the application**
+   Open your browser and navigate to `http://localhost:5173`
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+5. **Login credentials**
+   - Admin: `admin@company.com` / `admin123`
+   - User: `client@email.com` / `client123`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Features
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Admin Features
+- Manage job vacancies (create, edit, delete)
+- Configure form fields for each job (mandatory/optional/hidden)
+- View and manage job applicants
+- Resizable and reorderable table columns
+
+### User Features
+- Browse active job vacancies
+- View detailed job descriptions
+- Apply with dynamic forms (based on admin configuration)
+- Identity verification using hand gesture recognition
 ```

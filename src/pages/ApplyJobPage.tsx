@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useJobs } from "@/contexts/jobContext";
-import { ApplyJobForm } from "@/components/features/job-application";
+import { ApplyJobForm, ApplicationSubmitted } from "@/components/features/job-application";
 import { useState } from "react";
 
 const ApplyJobPage: React.FC = () => {
@@ -8,6 +8,7 @@ const ApplyJobPage: React.FC = () => {
   const { jobs, applyForJob } = useJobs();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   
   const selectedJob = jobs.find(job => job.id === jobId);
   
@@ -28,8 +29,7 @@ const ApplyJobPage: React.FC = () => {
       };
       
       await applyForJob(jobId as string, applicationData);
-      alert("Application submitted successfully!");
-      navigate("/dashboard");
+      setIsSubmitted(true);
     } catch (error) {
       console.error("Error submitting application:", error);
       alert("Failed to submit application. Please try again.");
@@ -47,12 +47,16 @@ const ApplyJobPage: React.FC = () => {
   
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
-      <ApplyJobForm 
-        jobTitle={selectedJob.jobName} 
-        job={selectedJob}
-        onSubmit={handleSubmit}
-        isSubmitting={isSubmitting}
-      />
+      {isSubmitted ? (
+        <ApplicationSubmitted onClose={() => navigate("/dashboard")} />
+      ) : (
+        <ApplyJobForm 
+          jobTitle={selectedJob.jobName} 
+          job={selectedJob}
+          onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </div>
   );
 };

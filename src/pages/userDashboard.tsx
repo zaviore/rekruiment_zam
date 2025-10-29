@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/authContext";
 import { useJobs } from "@/contexts/jobContext";
 import JobList from "@/components/dashboard/JobList";
 import JobDetail from "@/components/dashboard/JobDetail";
-import EmptyJobComponent from "./fragments/emptyJob";
+import { EmptyJobComponent } from "@/components/features/job-management";
 import { DashboardLayout } from "@/components";
 
 

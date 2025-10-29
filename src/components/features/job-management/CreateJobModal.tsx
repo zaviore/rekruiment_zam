@@ -198,6 +198,7 @@ const CreateJobModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     className={`w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none ${errors.maxSalary ? 'border-red-500' : ''}`}
                     placeholder="9.000.000"
                   />
+                </div>
                 {errors.maxSalary && <p className="text-red-500 text-xs mt-1">{errors.maxSalary}</p>}
               </div>
             </div>
@@ -234,16 +235,12 @@ const CreateJobModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 </div>
                 <div className={arr < fields.length - 1 ? 'border-b border-neutral-200' : ''} />
                 </div>
-               
-                
               ))}
             </div>
           </div>
         </div>
 
-       
-      </div>
-       <div className="sticky bottom-0 bg-white border-t px-6 py-4 flex justify-end rounded-b-xl">
+        <div className="sticky bottom-0 bg-white border-t px-6 py-4 flex justify-end rounded-b-xl">
           <button
             onClick={handleSubmit}
             className={`px-6 py-2 ${isFormValid ? 'bg-teal-500 hover:bg-teal-600' : 'bg-gray-300 cursor-not-allowed'} text-white rounded-lg font-medium`}
@@ -252,10 +249,9 @@ const CreateJobModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             Publish Job
           </button>
         </div>
-    </div>
+      </div>
     </div>
   )
 }
-
 
 export default CreateJobModal;

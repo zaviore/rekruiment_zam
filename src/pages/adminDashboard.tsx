@@ -1,12 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "@/components/dashboard/dashboardLayout";
 import { useAuth } from "@/contexts/authContext";
-import ManageCandidate from "./fragments/manageCandidate";
-import CreateJobModal from "./fragments/createJobModal";
-import EmptyJobComponent from "./fragments/emptyJob";
-import SearchBar from "@/components/ui/SearchBar";
-import JobCard from "@/pages/fragments/JobCard";
-import AddJobSection from "@/pages/fragments/addJobSection";
+import { ManageCandidate } from "@/components/features/candidate-management";
+import { SearchBar } from "@/components/shared/ui";
+import { CreateJobModal, EmptyJobComponent, JobCard, AddJobSection } from "@/components/features/job-management";
 import { useJobManagement } from "@/hooks/useJobManagement";
 import { ChevronRight } from "lucide-react";
 

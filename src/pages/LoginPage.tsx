@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import rakaminLogo from "@/assets/Logo_Rakamin.svg";
-import ErrorAlert from "@/components/ui/errorAlerts";
+import { ErrorAlert } from "@/components/shared/ui";
 import { useAuth } from "@/contexts/authContext";
 import { useState, useEffect } from "react";
 

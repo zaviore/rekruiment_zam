@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ArrowLeft, Calendar, ChevronDown} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { type Job, type FieldStatus } from "../../types";
-import { FingerVerification } from "../../components/features/verification";
+import { type Job, type FieldStatus } from "@/types";
+import { FingerVerification } from "@/components/features/verification";
 
 interface ApplyJobFormProps {
   jobTitle: string;

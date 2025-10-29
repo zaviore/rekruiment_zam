@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useJobs } from "@/contexts/jobContext";
-import { ApplyJobForm } from "./fragments";
+import { ApplyJobForm } from "@/components/features/job-application";
 import { useState } from "react";
 
 const ApplyJobPage: React.FC = () => {

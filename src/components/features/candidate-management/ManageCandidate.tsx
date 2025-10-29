@@ -1,3 +1,4 @@
+import React from "react";
 import { X } from "lucide-react";
 import { useJobs } from "@/contexts/jobContext";
 import type { Job } from "@/types";
@@ -149,4 +150,4 @@ const ManageCandidate: React.FC<{ job: Job; onBack: () => void }> = ({ job }) =>
   );
 };
 
-export default ManageCandidate
+export default ManageCandidate;

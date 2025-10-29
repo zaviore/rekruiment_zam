@@ -1,11 +1,9 @@
 import type { Job } from "@/types";
 
-
 interface JobCardProps {
   job: Job;
   onManage: (job: Job) => void;
 }
-
 
 const JobCard: React.FC<JobCardProps> = ({ job, onManage }) => {
 

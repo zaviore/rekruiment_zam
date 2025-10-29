@@ -1,4 +1,4 @@
-import { User, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useJobs } from "@/contexts/jobContext";
 import type { Job } from "@/types";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import { CustomCheckbox } from "@/components/ui";
 import emptyCandidateImg from "@/assets/empty_candidate.svg";
 import dayjs from "dayjs";
 
-const ManageCandidate: React.FC<{ job: Job; onBack: () => void }> = ({ job, onBack }) => {
+const ManageCandidate: React.FC<{ job: Job; onBack: () => void }> = ({ job }) => {
   const { getCandidatesByJobId } = useJobs();
   const candidates = getCandidatesByJobId(job.id);
   const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);

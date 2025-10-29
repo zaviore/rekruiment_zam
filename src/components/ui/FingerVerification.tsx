@@ -18,11 +18,11 @@ const FingerVerification: React.FC<{
   const webcamRef = useRef<Webcam | null>(null);
   const handposeModelRef = useRef<handpose.HandPose | null>(null);
   const isRunningRef = useRef<boolean>(true);
-  const [status, setStatus] = useState<string>("Memuat model...");
+  const [, setStatus] = useState<string>("Memuat model...");
   const [isVerified, setIsVerified] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const [modelLoaded, setModelLoaded] = useState(false);
-  const [gesture, setGesture] = useState<string>("Menunggu...");
+  const [, setGesture] = useState<string>("Menunggu...");
   const [showWebcam, setShowWebcam] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
@@ -365,7 +365,7 @@ const FingerVerification: React.FC<{
           console.log("Force stopped additional track:", track.kind);
         });
       })
-      .catch((err) => console.log("No additional tracks to stop"));
+      .catch((err) => console.log(err,"No additional tracks to stop"));
   }, []);
 
   useEffect(() => {

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Job } from "../../types";
 import jobIcon from "@/assets/Logo.svg";
@@ -9,7 +8,7 @@ interface JobDetailProps {
   isApplying: boolean;
 }
 
-const JobDetail: React.FC<JobDetailProps> = ({ selectedJob, onApply, isApplying }) => {
+const JobDetail: React.FC<JobDetailProps> = ({ selectedJob, isApplying }) => {
   const navigate = useNavigate();
   
   if (!selectedJob) {

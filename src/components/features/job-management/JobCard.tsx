@@ -18,7 +18,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onManage }) => {
   const getStatusStyles = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-[#F8FBF9] border-[#B8DBCA] text-[#43936C]";
+        return "bg-success-light border-success-border text-success";
       case "inactive":
         return "bg-red-100 text-red-700";
       default:
@@ -52,7 +52,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onManage }) => {
         </div>
         <button
           onClick={() => onManage(job)}
-          className="w-full md:w-auto mt-2 md:mt-0 px-4 py-2 bg-[#01959F] hover:bg-teal-600 text-white rounded-lg text-sm font-medium"
+          className="w-full md:w-auto mt-2 md:mt-0 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg text-sm font-medium"
         >
           Manage Job
         </button>

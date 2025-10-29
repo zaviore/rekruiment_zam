@@ -27,8 +27,8 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
         className={`
           w-5 h-5 rounded cursor-pointer flex items-center justify-center
           ${checked 
-            ? 'bg-[#01959F] border border-[#01959F]' 
-            : 'bg-white border border-[#01959F]'}
+            ? 'bg-primary border border-primary' 
+            : 'bg-white border border-primary'}
           transition-colors duration-200
         `}
       >

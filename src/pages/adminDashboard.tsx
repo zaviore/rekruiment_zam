@@ -104,7 +104,7 @@ const AdminDashboard: React.FC = () => {
             subtitle="Create jobs, invite, and hire with ease"
             buttonText="Create a new job"
             onButtonClick={() => toggleCreateModal(true)}
-            backgroundImage="/src/assets/createJobImg.jpg"
+            backgroundImage="/images/createJobImg.jpg"
           />
         </div>
       </div>

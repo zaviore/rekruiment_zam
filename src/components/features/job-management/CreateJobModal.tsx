@@ -243,7 +243,7 @@ const CreateJobModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <div className="sticky bottom-0 bg-white border-t px-6 py-4 flex justify-end rounded-b-xl">
           <button
             onClick={handleSubmit}
-            className={`px-6 py-2 ${isFormValid ? 'bg-teal-500 hover:bg-teal-600' : 'bg-gray-300 cursor-not-allowed'} text-white rounded-lg font-medium`}
+            className={`px-6 py-2 ${isFormValid ? 'bg-primary text-white hover:bg-primary-dark' : 'bg-gray-300 cursor-not-allowed'} text-white rounded-lg font-medium`}
             disabled={!isFormValid}
           >
             Publish Job
